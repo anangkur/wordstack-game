@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Random random = new Random();
     private StackedLayout stackedLayout;
     private String word1, word2;
+    private Stack<LetterTile> placedTiles = new Stack<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     TextView messageBox = (TextView) findViewById(R.id.message_box);
                     messageBox.setText(word1 + " " + word2);
                 }
-                /**
-                 **
-                 **  YOUR CODE GOES HERE
-                 **
-                 **/
+                placedTiles.push(tile);
                 return true;
             }
             return false;
@@ -139,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onStartGame(View view) {
+        resetGame();
+
         TextView messageBox = (TextView) findViewById(R.id.message_box);
         word1 = words.get(random.nextInt(words.size()));
         word2 = words.get(random.nextInt(words.size()));
@@ -182,12 +181,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void resetGame() {
+        stackedLayout.clear();
+
+        LinearLayout word1LinearLayout = findViewById(R.id.word1);
+        word1LinearLayout.removeAllViews();
+
+        LinearLayout word2LinearLayout = findViewById(R.id.word2);
+        word2LinearLayout.removeAllViews();
+    }
+
     public boolean onUndo(View view) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
-        return true;
+        if (!placedTiles.isEmpty()) {
+            LetterTile poppedTile = placedTiles.pop();
+            poppedTile.moveToViewGroup(stackedLayout);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

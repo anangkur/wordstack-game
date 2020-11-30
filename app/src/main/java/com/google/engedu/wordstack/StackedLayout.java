@@ -56,10 +56,9 @@ public class StackedLayout extends LinearLayout {
     }
 
     public void clear() {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        while (!tiles.isEmpty()) {
+            View popped = tiles.pop();
+            removeView(popped);
+        }
     }
 }
