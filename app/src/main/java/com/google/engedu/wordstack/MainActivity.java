@@ -140,13 +140,46 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onStartGame(View view) {
         TextView messageBox = (TextView) findViewById(R.id.message_box);
-        messageBox.setText("Game started");
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        word1 = words.get(random.nextInt(words.size()));
+        word2 = words.get(random.nextInt(words.size()));
+
+        String scrambleWord = scrambleWords(word1, word2);
+        messageBox.setText(scrambleWord);
+        pushWordToStackedLayout(scrambleWord);
         return true;
+    }
+
+    private String scrambleWords(String word1, String word2) {
+        int word1Counter = 0;
+        int word2Counter = 0;
+        int newLength = word1.length() + word2.length();
+        char[] newWord = new char[newLength];
+        for (int i = 0; i < word1.length() + word2.length(); i++) {
+            if (random.nextInt(2) == 0) {
+                if (word1Counter < word1.length()) {
+                    newWord[i] = word1.charAt(word1Counter);
+                    word1Counter++;
+                } else {
+                    newWord[i] = word2.charAt(word2Counter);
+                    word2Counter++;
+                }
+            } else {
+                if (word2Counter < word2.length()) {
+                    newWord[i] = word2.charAt(word2Counter);
+                    word2Counter++;
+                } else {
+                    newWord[i] = word1.charAt(word1Counter);
+                    word1Counter++;
+                }
+            }
+        }
+        return new String(newWord);
+    }
+
+    private void pushWordToStackedLayout(String word) {
+        for (int i = word.length() - 1; i >= 0; i--) {
+            stackedLayout.push(new LetterTile(this, word.charAt(i)));
+        }
     }
 
     public boolean onUndo(View view) {
